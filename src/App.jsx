@@ -7,7 +7,8 @@ import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
 import ForgotPassword from "./pages/ForgotPassword"
-
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App(){
   return(
@@ -23,6 +24,18 @@ export default function App(){
         <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
       </Routes>
     </Router>
+    <ToastContainer
+position="bottom-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="dark"
+/>
     </>
   )
 }

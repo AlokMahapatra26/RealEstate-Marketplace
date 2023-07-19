@@ -2,18 +2,25 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
-
+import {getAuth , createUserWithEmailAndPassword , updateProfile} from "firebase/auth";
+import {db} from '../firebase';
+import { serverTimestamp , setDoc , doc} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify"
 
 export default function Signup() {
 
-  const [fromData , setFormData] = useState({
+  //form state
+  const [formData , setFormData] = useState({
     fullname : "",
     email : "",
     password : "",
   });
 
-  const {fullname ,email , password} = fromData;
+  //destructuring form data
+  const {fullname ,email , password} = formData;
 
+  //On change function
   function onChange(e){
     setFormData((prevState) => ({
       ...prevState,
@@ -21,8 +28,36 @@ export default function Signup() {
     }));
   }
 
-  console.log(email);
-  console.log(password);
+  //useNavigate
+  const navigate = useNavigate();
+
+  async function onSubmit(e){
+    e.preventDefault();
+
+    try {
+      const auth = getAuth()
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password);
+        updateProfile(auth.currentUser ,{
+          displayName : fullname
+        })
+      const user = userCredential.user
+      const formDataCopy = {...formData};
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db , "users" , user.uid), formDataCopy)
+      navigate("/");
+      toast.success("Yo!! Sign up successful ")
+
+    } catch (error) {
+       toast.error(error)
+    }
+  }
+
+  
 
   return (
     <section className=''>
@@ -30,7 +65,7 @@ export default function Signup() {
       <h1 className='text-3xl text-center font-bold p-6'>Sign Up</h1>
       <div className='flex flex-col lg:w-1/4 md:w-2/4 w-3/4 mx-auto item-center justify-center mt-4'>
       
-        <form >
+        <form onSubmit={onSubmit}>
           <div className='flex flex-col'>
           <input type="text"
            placeholder='Full Name'
