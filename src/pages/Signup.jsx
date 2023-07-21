@@ -53,7 +53,7 @@ export default function Signup() {
       toast.success("Yo!! Sign up successful ")
 
     } catch (error) {
-       toast.error(error)
+       toast.error("Something went wrong");
     }
   }
 
