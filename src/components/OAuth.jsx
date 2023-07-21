@@ -26,12 +26,11 @@ function OAuth() {
           email: user.email,
           timestamp : serverTimestamp(),
         });
-      }else{
-        toast.error("account already exist")
+        
       }
 
-
       navigate("/");
+     
     }catch(error){
       toast.error("Something went wrong")
     }

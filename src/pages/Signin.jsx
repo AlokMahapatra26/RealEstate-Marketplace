@@ -2,6 +2,9 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 
 export default function Signin() {
@@ -12,6 +15,7 @@ export default function Signin() {
   });
 
   const {email , password} = fromData;
+  const navigate = useNavigate();
 
   function onChange(e){
     setFormData((prevState) => ({
@@ -20,8 +24,21 @@ export default function Signin() {
     }));
   }
 
-  console.log(email);
-  console.log(password);
+  async function onSubmit(e){
+    e.preventDefault()
+    try{
+      const auth = getAuth()
+      const userCredential = await signInWithEmailAndPassword(auth , email , password)
+      if(userCredential.user){
+        navigate("/")
+        toast.success("Sign in successful")
+      }
+
+    }catch(error){
+      toast.error("Wrong email or password")
+    }
+  }
+
 
   return (
     <section className=''>
@@ -29,7 +46,7 @@ export default function Signin() {
       <h1 className='text-3xl text-center font-bold p-6'>Sign In</h1>
       <div className='flex flex-col lg:w-1/4 md:w-2/4 w-3/4 mx-auto item-center justify-center mt-4'>
       
-        <form >
+        <form onSubmit={onSubmit}>
           <div className='flex flex-col'>
           <input type="email"
            placeholder='Email'
