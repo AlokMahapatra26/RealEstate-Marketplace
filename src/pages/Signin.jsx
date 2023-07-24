@@ -30,7 +30,7 @@ export default function Signin() {
       const auth = getAuth()
       const userCredential = await signInWithEmailAndPassword(auth , email , password)
       if(userCredential.user){
-        navigate("/")
+        navigate("/profile")
         toast.success("Sign in successful")
       }
 
