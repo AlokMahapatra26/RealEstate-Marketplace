@@ -22,7 +22,10 @@ export default function App(){
         <Route path="/offers" element={<Offers/>}></Route>
         <Route path="/sign-in" element={<Signin/>}></Route>
         <Route path="/sign-up" element={<Signup/>}></Route>
+
+        <Route path="/create-listing" element={<PrivateRoute/>}>
         <Route path="/create-listing" element={<CreateListing/>}></Route>
+        </Route>
 
         <Route path="/profile" element={<PrivateRoute/>}>
            <Route path="/profile" element={<Profile/>}></Route>
@@ -31,6 +34,8 @@ export default function App(){
         <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
       </Routes>
     </Router>
+
+
     <ToastContainer
 position="bottom-right"
 autoClose={5000}

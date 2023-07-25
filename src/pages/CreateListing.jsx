@@ -121,7 +121,7 @@ export default function createListing() {
           </button> 
           </div>
 
-          <p className='text-center mt-6'>( Prices are in rupee / day )</p>
+          <p className='text-center mt-6'>( Prices are in rupee / Months )</p>
           <div className='flex mt-6 w-2/3 lg:w-2/4 mx-auto justify-between items-center'>
           <p>Regular :  </p>
             <input type="number" className='w-20 border rounded p-2' id="regularPrise" min="0" value={regularPrise} onChange={onChange} required/>
