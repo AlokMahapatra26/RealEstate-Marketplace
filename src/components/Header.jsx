@@ -30,7 +30,7 @@ export default function Header() {
     <div className='bg-white border-b shadow-sm sticky top-0 z-50'>
         <header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
             <div>
-                <h2 className='cursor-pointer' onClick={()=>navigate("/")}>Stay</h2>
+                <h2 className='cursor-pointer text-2xl' onClick={()=>navigate("/")}>Stay</h2>
             </div>
             <div>
                 <ul className='flex space-x-10'>
