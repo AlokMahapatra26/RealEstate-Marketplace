@@ -1,28 +1,36 @@
 import React from 'react'
 import { useState } from 'react';
+import Spinner from '../components/Spinner';
+import { toast } from 'react-toastify';
 
-export default function createListing() {
 
+export default  function createListing() {
+
+  
 
   const [formData , setFormData] = useState({
     type:"flat",
     title : "",
     bedrooms : 1,
     bathrooms : 1,
-    parking : true,
+    parking : false,
     furnished : true,
     address : "",
     description : "",
     offer: true,
     regularPrise : 0,
-    discountedPrise : 0
+    discountedPrise : 0,
+    images : {}
 
   });
 
+  const [loading , setLoading] = useState(false);
+
    
 
-  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , regularPrise , discountedPrise} = formData;
+  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , regularPrise , discountedPrise , images} = formData;
 
+  
   function onChange(e){
     let boolean = null;
     if(e.target.value === "true"){
@@ -50,12 +58,46 @@ export default function createListing() {
     }
   }
 
-  console.log(type)
+
+
+  //onSubmit function
+
+  async function onSubmit(e){
+    e.preventDefault();
+    setLoading(true);
+
+    ////edge cases 
+    //edge case - 1
+    if(discountedPrise >= regularPrise){
+      setLoading(false)
+      toast.error("Discounted price neess to be less than regular price!!!")
+      return;
+    }
+    //edge case - 2
+    if(images.length > 12){
+      setLoading(false)
+      toast.error("Images should be less than 6")
+      return;
+    }
+
+    
+
+
+    
+  }
+
+
+ 
+
+
+  if(loading){
+    return <Spinner/>
+  }
 
   return (
     <main>
       <h1 className='text-3xl text-center mt-6 font-bold'>Create Listing</h1>
-      <form className='w-3/4 mx-auto flex flex-col'>
+      <form className='w-3/4 mx-auto flex flex-col' onSubmit={onSubmit}>
         <div className='flex w-2/3 lg:w-2/4 mx-auto mt-8'>
           <button type='button' id='type' value="flat" onClick={onChange} className={`mr-3 px-2 py-3 font-medium text-sm uppercase shadow rounded hover:shadow-md focus:shadow-md transition w-full ${type === "house" ? "bg-white" : "bg-red-500 text-white"
            }`}>
@@ -102,10 +144,10 @@ export default function createListing() {
 
             
           <div className='flex w-2/3 lg:w-2/4 mx-auto mt-8'>
-            <textarea name="address" id="address" value={address} placeholder='Enter Address..' className=' w-screen mx-auto px-2 py-2 outline-none border rounded  '></textarea>
+            <textarea name="address" id="address" value={address} placeholder='Enter Address..' className=' w-screen mx-auto px-2 py-2 outline-none border rounded  ' onChange={onChange}></textarea>
           </div>
           <div className='flex w-2/3 lg:w-2/4 mx-auto mt-8'>
-            <textarea name="description" id="description" value={description} placeholder='Enter Description...' className=' w-screen mx-auto px-2 py-2 outline-none border rounded  '></textarea>
+            <textarea name="description" id="description" value={description} placeholder='Enter Description...' className=' w-screen mx-auto px-2 py-2 outline-none border rounded  ' onChange={onChange}></textarea>
           </div>
           
 
