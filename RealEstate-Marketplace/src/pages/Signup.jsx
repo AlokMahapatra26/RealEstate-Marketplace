@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import {useNavigate} from 'react-router-dom';
 import OAuth from '../components/OAuth';
-import {getAuth , createUserWithEmailAndPassword } from "firebase/auth";
+import {getAuth , createUserWithEmailAndPassword ,updateProfile} from "firebase/auth";
 import {doc , serverTimestamp , setDoc} from 'firebase/firestore'
 import { db } from '../firebase';
 import {toast} from "react-toastify";
@@ -35,6 +35,11 @@ export default function Signup() {
       try{
         const auth = getAuth()
         const userCredential = await createUserWithEmailAndPassword(auth , email , password);
+
+        updateProfile(auth.currentUser , {
+          displayName : name,
+        })
+
         const user = userCredential.user;
         const formDataCopy = {...formData};
         delete formDataCopy.password;
