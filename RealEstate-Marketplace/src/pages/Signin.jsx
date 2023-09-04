@@ -5,7 +5,7 @@ import OAuth from '../components/OAuth';
 
 export default function Signin() {
 
-  const [showPassword , setShowPassword] = useState(false);
+  //STATE
   const [formData , setFormData] = useState({
     email : '',
     password : ''
@@ -14,14 +14,28 @@ export default function Signin() {
   //NAVIGATE
   const navigate = useNavigate();
 
+  //DESTRUCTURING
   const {email , password} = formData;
 
+  //ONCHNAGE FUNC
    const onChange = (e) =>{
     setFormData((prevState)=>({
       ...prevState,
       [e.target.id] : e.target.value,
     }))
    }
+
+   
+
+
+
+
+
+
+
+
+
+
 
   return (
     <section className='flex-1 h-[calc(100vh-3rem)]  flex justify-center items-center' >

@@ -6,12 +6,12 @@ import {getFirestore} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA-_-0Ye9J0fd1crCTpaY6_pQU9bYUD9i0",
-  authDomain: "stay-4daf4.firebaseapp.com",
-  projectId: "stay-4daf4",
-  storageBucket: "stay-4daf4.appspot.com",
-  messagingSenderId: "25734697593",
-  appId: "1:25734697593:web:6dc92c7107110661ecfaa8"
+  apiKey: "AIzaSyDb1Iw6Eft5KiHeZfwrGX2-Ot_3_Lrf5l8",
+  authDomain: "stay-realestate-marketplace.firebaseapp.com",
+  projectId: "stay-realestate-marketplace",
+  storageBucket: "stay-realestate-marketplace.appspot.com",
+  messagingSenderId: "686910722805",
+  appId: "1:686910722805:web:5938b2d4eca9117f2e6bbc"
 };
 
 // Initialize Firebase

@@ -2,8 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import {useNavigate} from 'react-router-dom';
 import OAuth from '../components/OAuth';
-
-
+import {getAuth , createUserWithEmailAndPassword } from "firebase/auth";
+import {doc , serverTimestamp , setDoc} from 'firebase/firestore'
+import { db } from '../firebase';
+import {toast} from "react-toastify";
 
 export default function Signup() {
 
@@ -26,10 +28,32 @@ export default function Signup() {
     }))
    }
 
+   //FIREBASE_AUTH_CODE
+   async function onSubmit(e){
+    e.preventDefault();
+    
+      try{
+        const auth = getAuth()
+        const userCredential = await createUserWithEmailAndPassword(auth , email , password);
+        const user = userCredential.user;
+        const formDataCopy = {...formData};
+        delete formDataCopy.password;
+        formDataCopy.timestamp = serverTimestamp();
+
+        await setDoc(doc(db,"users" , user.uid) , formDataCopy);
+        navigate('/');
+        toast.success("Signup successfull")
+        
+      }catch(error){
+        toast.error("Something went wrong");
+        
+      }
+   }
+
   return (
     <section className='flex-1 h-[calc(100vh-3rem)]  flex justify-center items-center' >
    
-   <form className='bg-white flex flex-col items-center justify-center border p-4 rounded'>
+   <form className='bg-white flex flex-col items-center justify-center border p-4 rounded' onSubmit={onSubmit}>
     <h1 className='text-2xl m-2'>Create Your Account</h1>
 
     <input type="text" placeholder='Name' id='name' value={name} className='p-2 my-4 border rounded' onChange={onChange}/>
@@ -45,7 +69,7 @@ export default function Signup() {
       }}>Sign in instead</p>
     </div>
     
-    <button className='my-2 bg-red-400 hover:bg-red-500 transition w-full p-2 rounded text-white '>Create </button>
+    <button type="submit" className='my-2 bg-red-400 hover:bg-red-500 transition w-full p-2 rounded text-white '>Create</button>
     <OAuth/>
    </form>
 
