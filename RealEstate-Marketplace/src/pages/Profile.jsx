@@ -2,6 +2,7 @@ import { getAuth } from 'firebase/auth';
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router';
+import {Link} from  'react-router-dom'
 
 export default function Profile() {
 
@@ -39,9 +40,12 @@ export default function Profile() {
           
           
          
-            <p className='mt-4 cursor-pointer' >Edit
-              
-            </p>
+            <button type='submit'>
+              <Link to={"/create-listing"}>
+              Add Your Property on Sale or Rent
+              </Link>
+              </button>
+
             <p onClick={onLogout} className='cursor-pointer bg-red-400 inline  rounded text-white hover:bg-red-600 p-2 mt-4'>Sign out</p>
           
             </div>
