@@ -40,13 +40,13 @@ export default function Profile() {
           
           
          
-            <button type='submit'>
+            <button type='submit' className=' border hover:bg-gray-200 transition p-2 rounded mt-4'>
               <Link to={"/create-listing"}>
               Add Your Property on Sale or Rent
               </Link>
               </button>
 
-            <p onClick={onLogout} className='cursor-pointer bg-red-400 inline  rounded text-white hover:bg-red-600 p-2 mt-4'>Sign out</p>
+            <p onClick={onLogout} className='cursor-pointer border inline  rounded  hover:bg-red-500 hover:text-white transition p-2 mt-4'>Sign out</p>
           
             </div>
           </div>
