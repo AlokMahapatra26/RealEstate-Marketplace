@@ -5,7 +5,7 @@ import {toast} from "react-toastify"
 export default function CreateListing() {
 
   //GEO LOCATION HOOK
-  const [geolocationEnabled , setGeolocationEnabled] = useState(true);
+  const [geolocationEnabled , setGeolocationEnabled] = useState(false);
 
   //LOADING HOOK
   const [loading , setLoading] = useState(false);
@@ -66,11 +66,11 @@ export default function CreateListing() {
     setLoading(true);
 
     //discounted prices should be less than regular check
-    if(discountedPrice >= actualPrice ){
-      setLoading(false);
-      toast.error("Discounted prise should need to be less than regular price");
-      return;
-    }
+    // if(discountedPrice >= actualPrice ){
+    //   setLoading(false);
+    //   toast.error("Discounted prise should need to be less than regular price");
+    //   return;
+    // }
 
     //maximum image quantity should be 6 check
     if(images.length > 6){
@@ -79,6 +79,15 @@ export default function CreateListing() {
       return;
     }
 
+    let geolocation ={}
+    let location 
+    if(geolocationEnabled){
+      console.log("itna paisa nahi")
+    }else{
+      geolocation.lat  = latitude;
+      geolocation.lng = longitude;
+      console.log(latitude , longitude);
+    }
 
   }
 
@@ -169,7 +178,7 @@ export default function CreateListing() {
           <p className='text-sm mt-2 text-red-500'>Note : the first image will be the cover and maximum 6 images are allowed</p>
         </div>
 
-        <button type='submit' id='type' value="sale" onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>ADD</button>
+        <button type='submit' onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>ADD</button>
 
       </form>
     </main>
