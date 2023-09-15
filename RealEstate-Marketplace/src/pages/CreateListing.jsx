@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
+import Spinner from '../components/Spinner';
+import {toast} from "react-toastify"
 
 export default function CreateListing() {
+
+  //GEO LOCATION HOOK
+  const [geolocationEnabled , setGeolocationEnabled] = useState(true);
+
+  //LOADING HOOK
+  const [loading , setLoading] = useState(false);
 
   //USE STATE
   const [formData , setFormData]  = useState({
@@ -14,13 +22,17 @@ export default function CreateListing() {
     address : '',
     offer : false,
     actualPrice : '',
-    discountedPrise : '',
-    totalAmount : ''
+    discountedPrice : '',
+    totalAmount : '',
+    latitude : 0,
+    longitude : 0,
+    images : {}
   });
 
   //DESTRUCTURING
-  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , actualPrice , discountedPrise , totalAmount} = formData;
+  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , actualPrice , discountedPrice , totalAmount , latitude , longitude , images} = formData;
 
+  //SOME COMPLEX LOGIC TO TOGGLE STATE
   function onChange(e){
     let boolean = null;
 
@@ -47,10 +59,37 @@ export default function CreateListing() {
     }
   }
 
+
+  //ON SUBIT FUNCTION
+  function onSubmit(e){
+    e.preventDefault();
+    setLoading(true);
+
+    //discounted prices should be less than regular check
+    if(discountedPrice >= actualPrice ){
+      setLoading(false);
+      toast.error("Discounted prise should need to be less than regular price");
+      return;
+    }
+
+    //maximum image quantity should be 6 check
+    if(images.length > 6){
+      setLoading(false);
+      toast.error("maximum 6 images are allowed");
+      return;
+    }
+
+
+  }
+
+  if(loading){
+    return <Spinner/>;
+  }
+
   return (
     <main className='max-w-md px-2 mx-auto'>
       <h1 className='text-3xl text-center mt-6 font-bold'>Create a Lisiting</h1>
-      <form className='mt-8'>
+      <form className='mt-8' onSubmit={onSubmit}>
 
         <div className='flex mt-4 '>
           <button type='button' id='type' value="sell" onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow  ${type === 'rent' ? "bg-white " : "bg-red-500 text-white" }`}>SELL</button>
@@ -83,6 +122,18 @@ export default function CreateListing() {
         <textarea type="text" placeholder='Description' id="description" value={description} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
 
         <textarea type="text" placeholder='Address' id="address" value={address} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
+        {!geolocationEnabled && (
+          <div className='flex '>
+            <div className='mr-4'>
+              <p className='text-sm opacity-50 mt-2'>Latitude</p>
+              <input type="number" id='latitude' value={latitude} onChange={onChange} required className='w-full mr-2 py-3 px-7 border rounded outline-none' min="-90" max="90"/>
+            </div>
+            <div className=''>
+              <p className='text-sm opacity-50 mt-2'>Longitide</p>
+              <input type="number" id='longitude' value={longitude} onChange={onChange} required className='w-full mr-2 py-3 px-7 border rounded outline-none' min="-180" max="180"/>
+            </div>
+          </div>
+        )}
 
         <div className='flex mt-4 '>
           <button type='button' id='offer' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md  ${!offer ? " text-black" : "bg-red-500 text-white" }`}>Offer</button>
@@ -100,7 +151,7 @@ export default function CreateListing() {
           )
           }
           
-          <input type="number" placeholder="Discounted price" id='discountedPrice' value={discountedPrise} className='w-full ml-2 px-4 py-3 border rounded outline-none' onChange={onChange} />
+          <input type="number" placeholder="Discounted price" id='discountedPrice' value={discountedPrice} className='w-full ml-2 px-4 py-3 border rounded outline-none' onChange={onChange} />
 
         
          </div>
@@ -118,7 +169,7 @@ export default function CreateListing() {
           <p className='text-sm mt-2 text-red-500'>Note : the first image will be the cover and maximum 6 images are allowed</p>
         </div>
 
-        <button type='button' id='type' value="sale" onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>ADD</button>
+        <button type='submit' id='type' value="sale" onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>ADD</button>
 
       </form>
     </main>
