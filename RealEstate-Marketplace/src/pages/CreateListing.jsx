@@ -8,7 +8,7 @@ export default function CreateListing() {
     title : '',
     bedrooms : '',
     bathrooms : '',
-    furnished : true,
+    furnished : false,
     parking : false,
     description : '',
     address : '',
@@ -21,8 +21,30 @@ export default function CreateListing() {
   //DESTRUCTURING
   const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , actualPrice , discountedPrise , totalAmount} = formData;
 
-  function onChange(){
-    type : !type
+  function onChange(e){
+    let boolean = null;
+
+    if(e.target.value === "true"){
+      boolean = true;
+    }
+
+    if(e.target.value === "false"){
+      boolean = false;
+    }
+
+    if(e.target.files){
+      setFormData((prevState)=>({
+        ...prevState,
+        images : e.target.files
+      }))
+    }
+
+    if(!e.target.files){
+      setFormData((prevState)=>({
+        ...prevState,
+        [e.target.id] : boolean ?? e.target.value,
+      }))
+    }
   }
 
   return (
@@ -31,8 +53,8 @@ export default function CreateListing() {
       <form className='mt-8'>
 
         <div className='flex mt-4 '>
-          <button type='button' id='type' value="sale" onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md text-white ${type === 'rent' ? "bg-white text-black" : "bg-red-500" }`}>SELL</button>
-          <button type='button' id='type' value="sale" onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  f transition w-full shadow hover:shadow-md text-white ${type === 'sell' ? "bg-white text-black" : "bg-red-500" }`}>RENT</button>
+          <button type='button' id='type' value="sell" onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow  ${type === 'rent' ? "bg-white " : "bg-red-500 text-white" }`}>SELL</button>
+          <button type='button' id='type' value="rent" onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  f transition w-full shadow  ${type === 'sell' ? "bg-white " : "bg-red-500 text-white" }`}>RENT</button>
         </div>
 
         <input type="text" placeholder='Title...' id="title" value={title} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} maxLength="32" minLength="10" required/>
@@ -40,22 +62,22 @@ export default function CreateListing() {
         <div className='flex mt-4'>
           
             
-            <input type="number" placeholder='Bedrooms' id='bedrooms'  value={bedrooms}className='w-full mr-2 py-3 px-7 border rounded outline-none' onChange={onChange} min="1" max="50" required/>
+            <input type="number" placeholder='Bedrooms' id='bedrooms'  value={bedrooms} className='w-full mr-2 py-3 px-7 border rounded outline-none' onChange={onChange} min="1" max="50" required/>
           
           
             
-            <input type="number" placeholder="Bathrooms" id='bedrooms' value={bathrooms} className='w-full ml-2 px-7 py-3 border rounded outline-none' onChange={onChange} min="1" max="50" required/>
+            <input type="number" placeholder="Bathrooms" id='bathrooms' value={bathrooms} className='w-full ml-2 px-7 py-3 border rounded outline-none' onChange={onChange} min="1" max="50" required/>
           
         </div>
 
         <div className='flex mt-4 '>
-          <button type='button' id='furnished' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md text-white ${!furnished ? "bg-white text-black" : "bg-red-500" }`}>Furnished</button>
-          <button type='button' id='furnished' value={false} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  transition w-full shadow hover:shadow-md text-white ${ furnished ? "bg-white text-black" : "bg-red-500" }`}>unfurnished</button>
+          <button type='button' id='furnished' value={true} onClick={onChange} className={`px-7 py-3 mr-2  font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md ${!furnished ? "text-black"  : "bg-red-500 text-white" }`}>Furnished</button>
+          <button type='button' id='furnished' value={false} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  transition w-full shadow hover:shadow-md ${ furnished ? " text-black" : "bg-red-500 text-white" }`}>unfurnished</button>
         </div>
 
         <div className='flex mt-4 '>
-          <button type='button' id='parking' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md text-white ${!parking ? "bg-white text-black" : "bg-red-500" }`}>Parking space</button>
-          <button type='button' id='parking' value={true} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase border rounded  transition w-full shadow hover:shadow-md text-white ${parking ? "bg-white text-black" : "bg-red-500" }`}>No parking space</button>
+          <button type='button' id='parking' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md  ${!parking ? " text-black" : "bg-red-500 text-white" }`}>Parking space</button>
+          <button type='button' id='parking' value={false} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  transition w-full shadow hover:shadow-md  ${parking ? "text-black" : "bg-red-500 text-white" }`}>No parking space</button>
         </div>
 
         <textarea type="text" placeholder='Description' id="description" value={description} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
@@ -63,8 +85,8 @@ export default function CreateListing() {
         <textarea type="text" placeholder='Address' id="address" value={address} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
 
         <div className='flex mt-4 '>
-          <button type='button' id='offer' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md text-white ${!offer ? "bg-white text-black" : "bg-red-500" }`}>Offer</button>
-          <button type='button' id='offer' value={false} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  transition w-full shadow hover:shadow-md text-white ${ offer ? "bg-white text-black" : "bg-red-500" }`}>No Offer</button>
+          <button type='button' id='offer' value={true} onClick={onChange} className={`px-7 py-3 mr-2 font-medium text-sm uppercase rounded  transition w-full shadow hover:shadow-md  ${!offer ? " text-black" : "bg-red-500 text-white" }`}>Offer</button>
+          <button type='button' id='offer' value={false} onClick={onChange} className={`px-7 py-3 ml-2 font-medium text-sm uppercase  rounded  transition w-full shadow hover:shadow-md  ${ offer ? " text-black" : "bg-red-500 text-white" }`}>No Offer</button>
         </div>
         
         { offer && (
