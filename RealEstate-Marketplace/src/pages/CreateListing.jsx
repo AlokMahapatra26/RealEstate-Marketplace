@@ -149,6 +149,7 @@ export default function CreateListing() {
     ...formData,
     imgUrls,
     timestamp : serverTimestamp(),
+    userRef : auth.currentUser.uid,
   };
 
  // Remove empty fields
