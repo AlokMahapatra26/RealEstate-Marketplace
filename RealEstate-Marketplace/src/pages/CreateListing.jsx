@@ -4,8 +4,13 @@ import {toast} from "react-toastify"
 import {getStorage , ref , uploadBytesResumable , getDownloadURL} from "firebase/storage"
 import {getAuth} from 'firebase/auth'
 import {v4 as uuidv4} from "uuid";
+import {addDoc, collection, serverTimestamp} from "firebase/firestore"
+import {db} from "../firebase";
+import { useNavigate } from 'react-router';
+
 export default function CreateListing() {
 
+  const navigate = useNavigate();
   const auth = getAuth()
 
   //GEO LOCATION HOOK
@@ -69,12 +74,12 @@ export default function CreateListing() {
     e.preventDefault();
     setLoading(true);
 
-    //discounted prices should be less than regular check
-    // if(discountedPrice >= actualPrice ){
-    //   setLoading(false);
-    //   toast.error("Discounted prise should need to be less than regular price");
-    //   return;
-    // }
+    // discounted prices should be less than regular check
+    if(+discountedPrice >= +actualPrice ){
+      setLoading(false);
+      toast.error("Discounted prise should need to be less than regular price");
+      return;
+    }
 
     //maximum image quantity should be 6 check
     if(images.length > 6){
@@ -136,13 +141,33 @@ export default function CreateListing() {
     [...images].map((image)=>storeImage(image))).catch((error)=>{
       setLoading(false);
       toast.error("Images not uploaded");
+      return;
     }
   );
-  console.log(imgUrls);
 
+  const formDataCopy = {
+    ...formData,
+    imgUrls,
+    timestamp : serverTimestamp(),
+  };
+
+ // Remove empty fields
+for (const key in formDataCopy) {
+  if (formDataCopy[key] === '') {
+    delete formDataCopy[key];
+  }
+}
+  
+  delete formDataCopy.images;
+  !formDataCopy.offer && delete formDataCopy.discountedPrice;
+  console.log(formDataCopy)
+  const docRef = await addDoc(collection(db , "listings"), formDataCopy);
+  setLoading(false);
+  toast.success("Listing created");
+  navigate(`/category/${formDataCopy.type}/${docRef.id}`)
   }
 
-
+ 
 
 
   if(loading){
@@ -232,7 +257,7 @@ export default function CreateListing() {
           <p className='text-sm mt-2 text-red-500'>Note : the first image will be the cover and maximum 6 images are allowed</p>
         </div>
 
-        <button type='submit' onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>ADD</button>
+        <button type='submit' onClick={onChange} className={`px-7 py-3 mt-6 font-medium text-sm uppercase rounded  transition w-full shadow bg-gray-900 hover:shadow-md text-white`}>Create Listing</button>
 
       </form>
     </main>
