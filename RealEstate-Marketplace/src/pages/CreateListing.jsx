@@ -75,11 +75,11 @@ export default function CreateListing() {
     setLoading(true);
 
     // discounted prices should be less than regular check
-    if(+discountedPrice >= +actualPrice ){
-      setLoading(false);
-      toast.error("Discounted prise should need to be less than regular price");
-      return;
-    }
+    // if(+discountedPrice >= +actualPrice ){
+    //   setLoading(false);
+    //   toast.error("Discounted prise should need to be less than regular price");
+    //   return;
+    // }
 
     //maximum image quantity should be 6 check
     if(images.length > 6){
