@@ -1,9 +1,11 @@
 import { getAuth } from 'firebase/auth';
-import React from 'react'
+import { orderBy, query , collection , where , doc , updateDoc , getDocs} from 'firebase/firestore';
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router';
 import {Link} from  'react-router-dom'
-
+import { db } from '../firebase';
+import ListingItem from '../components/ListingItem';
 export default function Profile() {
 
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ export default function Profile() {
     name : auth.currentUser.displayName,
     email : auth.currentUser.email
   })
+  const [listings , setListings] = useState(null);
+  const [loading , setLoading] = useState(true);
 
   //LOGOUT FUNTION
   function onLogout(){
@@ -24,6 +28,29 @@ export default function Profile() {
   }
 
   const {name , email} = formData;
+
+
+  //FETCHING LISTING DATA FROM DATABASE
+  useEffect(()=>{
+    async function fetchUserListings(){
+      
+      const listingRef = collection(db , "listings");
+      const q = query(listingRef , where("userRef" , "==" , auth.currentUser.uid), orderBy("timestamp", "desc"));
+      const querySnap = await getDocs(q);
+      let listings = [];
+      querySnap.forEach((doc)=>{
+        return listings.push({
+          id: doc.id,
+          data : doc.data(),
+        })
+      })
+      setListings(listings);
+      setLoading(false);
+    }
+    fetchUserListings();
+  },[auth.currentUser.uid])       
+
+  console.log(listings);
   return (
     <>
     <section>
@@ -51,6 +78,18 @@ export default function Profile() {
             </div>
           </div>
     </section>
+    <div max-w-6xl px-3 mt-6 mx-auto>
+      {!loading && listings.length > 0 && (
+        <>
+        <h2 className='text-2xl text-center font-semibold'>My Listing</h2>
+          <ul>
+            {listings.map((listing)=>(
+              <ListingItem key={listing.id} listing={listing.data}/>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
     </>
   )
 }
