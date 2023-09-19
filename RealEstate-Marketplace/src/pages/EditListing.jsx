@@ -46,6 +46,18 @@ export default function EditListing() {
 
   const params = useParams();
 
+
+    //PERMISSION FOR EDITING LISTING
+    useEffect(()=>{
+      if(listing && listing.userRef !== auth.currentUser.uid){
+        toast.error("You cannot edit this listing");
+        navigate("/");
+      }
+    },[auth.currentUser.uid , listing , navigate])
+  
+
+
+  //FETCHING DATA FIRST
   useEffect(()=>{
     setLoading(true);
     async function fetchListing(){
@@ -57,11 +69,13 @@ export default function EditListing() {
         setLoading(false);
       }else{
         navigate("/")
-        toast.error("Listing does not exist")
+        toast.error("Listing does not exist");
+        
       }
     }
     fetchListing();
-  },[])
+  },[navigate , params.listingId]);
+
 
   //SOME COMPLEX LOGIC TO TOGGLE STATE
   async function onChange(e){
@@ -181,7 +195,7 @@ for (const key in formDataCopy) {
   const docRef = doc(db , "listings" , params.listingId);
   await updateDoc(docRef, formDataCopy);
   setLoading(false);
-  toast.success("Listing created");
+  toast.success("Listing updated");
   navigate(`/category/${formDataCopy.type}/${docRef.id}`)
   }
 
