@@ -9,3 +9,18 @@
     box-sizing: border-box;
     
 }
+
+.img-board{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.adsImages{
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+   
+    
+}
