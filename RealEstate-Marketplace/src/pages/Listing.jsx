@@ -7,8 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState , useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import { FaMapMarkerAlt , FaBed , FaBath , FaParking , FaChair} from "react-icons/fa";
+import { getAuth } from 'firebase/auth';
 
 export default function Listing() {
+
+    //getting user info
+    const auth = getAuth();
 
     const params = useParams();
     const [listing , setListing] = useState(true);
@@ -32,6 +36,8 @@ export default function Listing() {
         return <Spinner/>
     }
 
+    console.log(listing);
+    
   return (
     <main className=''>
         <div className='flex flex-col md:flex-row max-w-6xl lg:mx-auto m-4 p-8 rounded-lg border-3 shadow-lg bg-white'>
@@ -81,6 +87,13 @@ export default function Listing() {
                     <FaChair className='text-xl'/>                        
                         {listing.furnished ? "Unfurnished" : ""}</li>      
                 </ul>
+
+                <div className='mt-6'>
+                <a href={`mailto:${listing.email}`} className='bg-red-500 text-white p-2 rounded mr-2'>
+                    Email
+                </a>
+                
+                </div>
 
                 <h2 className='text-xl font-semibold text-gray-700 mt-8'>Images</h2>
 

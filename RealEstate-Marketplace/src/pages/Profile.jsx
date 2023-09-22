@@ -68,7 +68,7 @@ export default function Profile() {
     
   }
 
-  console.log(listings);
+  
   return (
     <>
     <section>

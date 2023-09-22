@@ -35,11 +35,12 @@ export default function CreateListing() {
     totalAmount : '',
     latitude : 0,
     longitude : 0,
-    images : {}
+    images : {},
+    email : ''
   });
 
   //DESTRUCTURING
-  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , actualPrice , discountedPrice , totalAmount , latitude , longitude , images} = formData;
+  const {type , title , bedrooms , bathrooms , parking , furnished , address , description , offer , actualPrice , discountedPrice , totalAmount , latitude , longitude , images , email} = formData;
 
   //SOME COMPLEX LOGIC TO TOGGLE STATE
   async function onChange(e){
@@ -252,6 +253,10 @@ for (const key in formDataCopy) {
           <input type="number" placeholder={(type === 'sell' ? "Total Amount " : 'Amount / months' ) } id="totalAmount" value={totalAmount} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
         )
         }
+
+        <input type="email" placeholder='Enter Your Email' id="email" value={email} className='px-7 py-3 mt-6 rounded border w-full outline-none' onChange={onChange} required/>
+
+
 
         <div className='mt-6'>
           <input type="file" id='images' onChange={onChange} accept='.jpg , .png , .jpeg' multiple required/>
