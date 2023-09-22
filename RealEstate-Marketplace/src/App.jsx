@@ -20,7 +20,11 @@ function App() {
       <Router>
         <Header/>
         <Routes>
+
+          <Route path='/' element={<PrivateRoute/>}>
           <Route path='/' element={<Home/>}></Route>
+          </Route>
+         
 
           <Route path='/profile' element={<PrivateRoute/>}>
           <Route path='/profile' element={<Profile/>}/>
@@ -39,7 +43,11 @@ function App() {
           <Route path='/sign-up' element={<Signup/>}/>
 
           <Route path='/forgot-password' element={<ForgotPassword/>}/>
+
+          <Route path='/' element={<PrivateRoute/>}>
           <Route path='/offers' element={<Offers/>}/>
+          </Route>
+          
           <Route path='/category/:categoryName/:listingId' element={<Listing/>}/>
         </Routes>
       </Router>
